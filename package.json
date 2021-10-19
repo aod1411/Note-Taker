@@ -1,0 +1,23 @@
+{
+  "name": "note-taker",
+  "version": "1.0.0",
+  "description": "Note taker application that saves notes to a database",
+  "main": "server.js",
+  "scripts": {
+    "test": "n/a",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aod1411/Note-Taker.git"
+  },
+  "author": "Aida Olvera-Dyckes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aod1411/Note-Taker/issues"
+  },
+  "homepage": "https://github.com/aod1411/Note-Taker#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
