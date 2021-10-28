@@ -1,35 +1,55 @@
 const router = require("express").Router();
 let db = require("../db/db.json");
+const fs = require("fs");
+const path = require("path");
+const { v4: uuidv4 } = require('uuid');
 
 router.get("/notes", function(req,res){
-    res.json(db);
+    res.sendFile(path.join(__dirname, "../db/db.json"));
+          
 })
 
 router.post('/notes', function (req, res){
-    req.body.id = db.length + 1;
-     req.body;
-    console.log("POST NOTES", req.body)
 
-    db.push(req.body);
-    res.json(db);
+    const { title, text } = req.body;
+
+    const newNote = { 
+        title, 
+        text,
+        id: uuidv4(),
+    }
+
+    fs.readFile(path.join(__dirname, "../db/db.json", 'utf-8'), function(err, data) {
+        const parsedNotes = JSON.parse(data)
+        parsedNotes.push(newNote)
+      
+
+    fs.writeFile(path.join(__dirname, '../db/db.json'), JSON.stringify(parsedNotes), function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+
+      });
+    });
+      res.sendFile(path.join(__dirname, "../db/db.json"));
+
 })
 
 router.delete("/notes/:id", function(req, res){
 
-    newDB = []
-    console.log("REQ.PARAMS", req.params)
-    for(var i =0; i < db.length; i++){
-
-        if(parseInt(req.params.id) !== db[i].id){
-            newDB.push(db[i])
-
+    fs.readFile("../db/db.json", 'utf8', function(err, data) {
+        const parsedNotes = JSON.parse(data)
+        
+        console.log("req.params",req.params.id)
+        for(let i =0; i < parsedNotes.length; i++){
+            if(req.params.id === parsedNotes[i].id){
+                parsedNotes.splice(i, 1)
+            }
         }
-    }
-
-    console.log("NEW DB", newDB)
-    db = newDB;
-    res.json(db);
-
+        fs.writeFile(__dirname, "../db/db.json", JSON.stringify(parsedNotes), (err)=>{
+            console.log(err)
+        })
+        res.sendFile(path.join(__dirname, "../db/db.json"))
+    })
 
 })
 
