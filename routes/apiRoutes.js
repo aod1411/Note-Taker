@@ -19,7 +19,7 @@ router.post('/notes', function (req, res){
         id: uuidv4(),
     }
 
-    fs.readFile(path.join(__dirname, "../db/db.json", 'utf-8'), function(err, data) {
+    fs.readFile(path.join(__dirname, "../db/db.json"),'utf-8', function(err, data) {
         const parsedNotes = JSON.parse(data)
         parsedNotes.push(newNote)
       
@@ -36,16 +36,15 @@ router.post('/notes', function (req, res){
 
 router.delete("/notes/:id", function(req, res){
 
-    fs.readFile("../db/db.json", 'utf8', function(err, data) {
+    fs.readFile(path.join(__dirname, "../db/db.json"), 'utf-8', function(err, data) {
         const parsedNotes = JSON.parse(data)
-        
-        console.log("req.params",req.params.id)
+       
         for(let i =0; i < parsedNotes.length; i++){
             if(req.params.id === parsedNotes[i].id){
                 parsedNotes.splice(i, 1)
             }
         }
-        fs.writeFile(__dirname, "../db/db.json", JSON.stringify(parsedNotes), (err)=>{
+        fs.writeFile(path.join(__dirname, "../db/db.json"),JSON.stringify(parsedNotes), (err)=>{
             console.log(err)
         })
         res.sendFile(path.join(__dirname, "../db/db.json"))
